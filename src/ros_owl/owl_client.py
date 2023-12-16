@@ -27,11 +27,8 @@ class OwlClient():
 
     def detect(self, img_rgb, classes):
         req = DetectObjectsRequestMsg()
-        req.image = self._bridge.cv2_to_imgmsg(img_rgb)
+        req.image = img_rgb
         req.classes = [str(c) for c in classes]
         res = self._srv_owl(req)
-        return res.boxes, res.scores, res.labels
-        '''res = self._srv_owl(
-            self._bridge.cv2_to_imgmsg(img_rgb), 
-            classes)
-        return res.boxes, res.scores, res.labels'''
+        return res.boxes, res.scores, res.labels, res.output_image
+ 

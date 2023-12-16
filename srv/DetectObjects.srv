@@ -4,3 +4,4 @@ string[]                          classes          # Classes to detect
 std_msgs/Float32MultiArray        boxes            # Boxes can only be positive samples
 float32[]                         scores           # Scores for the objects
 int32[]                           labels           # Labels for the objects
+sensor_msgs/Image                 output_image     # Image to detect

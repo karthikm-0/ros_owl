@@ -14,16 +14,13 @@ from ros_owl.srv import DetectObjects        as DetectObjectsSrv, \
 
 from ros_owl import Owl
 from PIL import Image
-
+np.float = np.float64  # temp fix for following import
+import ros_numpy
+from sensor_msgs.msg import Image as ImageMsg
 
 if __name__ == '__main__':
     rospy.init_node('ros_owl')
-
-    #model = rospy.get_param('~model', 'vit_l')
-    #cuda  = rospy.get_param('~cuda', 'cuda')
-
     bridge = CvBridge()
-
     print('Starting Owl...')
 
     owl = Owl()
@@ -50,7 +47,8 @@ if __name__ == '__main__':
             print("Detecting objects:")
             print(img.shape)
 
-            boxes, scores, labels = owl.detect(Image.fromarray(img), classes)
+            boxes, scores, labels, output_image = owl.detect(Image.fromarray(img), classes)
+            #print(boxes)
 
             boxes_msg = bounding_boxes_to_float32multiarray(boxes)
 
@@ -58,6 +56,7 @@ if __name__ == '__main__':
             res.boxes  = boxes_msg
             res.scores = scores.tolist()
             res.labels = labels.tolist()
+            res.output_image = ros_numpy.msgify(ImageMsg, np.array(output_image), encoding='rgb8')
             return res
         
         except Exception as e:
